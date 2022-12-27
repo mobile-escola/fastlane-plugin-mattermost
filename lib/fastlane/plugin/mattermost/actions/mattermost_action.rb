@@ -6,8 +6,8 @@ DEFAULT_ICON_URL = "https://www.mattermost.org/wp-content/uploads/2016/04/icon.p
 
 def is_set variable
   str_variable = variable
-  str_variable = variable.strip if variable.class.to_s == "String"
-  variable && !(str_variable.nil? || str_variable.empty?)
+  # str_variable = variable.strip if variable.class.to_s == "String"
+  variable && !(str_variable.nil?)
 end
 
 module Fastlane
@@ -25,8 +25,7 @@ module Fastlane
             'Content-Type': 'application/json'
           }
           body = {
-            'username': (is_set(params[:username]) ? params[:username] : DEFAULT_USERNAME),
-            'icon_url': (is_set(params[:icon_url]) ? params[:icon_url] : DEFAULT_ICON_URL)
+            'username': (is_set(params[:username]) ? params[:username] : DEFAULT_USERNAME)
           }
 
           if !is_set(params[:text]) && !is_set(params[:attachments])
@@ -36,6 +35,7 @@ module Fastlane
 
           body.merge!('text': params[:text]) if is_set(params[:text])
           body.merge!('channel': params[:channel]) if is_set(params[:channel])
+          body.merge!('icon_url': params[:icon_url]) if is_set(params[:icon_url])
           body.merge!('icon_emoji': params[:icon_emoji]) if is_set(params[:icon_emoji])
           body.merge!('attachments': params[:attachments]) if is_set(params[:attachments])
           body.merge!('props': params[:props]) if is_set(params[:props])
